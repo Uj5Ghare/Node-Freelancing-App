@@ -1,0 +1,14 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: freelancing-svc
+  labels:
+    app: freelancing-app 
+spec:
+  ports:
+    - port: 5000
+      targetPort: 5000
+      nodePort: 32500
+  selector:
+    app: freelancing-app 
+  type: NodePort

@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: freelancing-deploy
+spec:
+  selector:
+    matchLabels:
+      app: freelancing-app 
+  template:
+    metadata:
+      name: freelancing-pod 
+      labels:
+        app: freelancing-app 
+    spec:
+      containers:
+      - name: freelancing-con
+        image: uj5ghare/node-freelancing-app 
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 5000
+
+
