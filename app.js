@@ -14,7 +14,9 @@ app.get('/', (req, res) => {
 });
 
 // Start the server on port 3000
-app.listen(5000, () => {
-    console.log('Server is running on port 5000');
+
+let server = app.listen(3000, function () {
+  console.log('App listening on port 3000');
 });
 
+module.exports = server;
