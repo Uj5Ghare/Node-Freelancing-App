@@ -17,8 +17,8 @@ pipeline {
         }
     
     stages {
-        stage {
-            steps("Checkout") {
+        stage("Checkout") {
+            steps {
                 git branch: "main", credentialId: "ssh-github", url: "git@github.com:Uj5Ghare/Node-Freelancing-App.git"
             }
         }
