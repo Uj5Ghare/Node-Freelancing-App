@@ -67,8 +67,18 @@ pipeline {
             steps {
                 withAWS(credentials: "aws_creds", region: "ap-south-1") {
                     sh 'aws ecs update-service --cluster ${CLUSTER} --service ${SERVICE} --force-new-deployment'
+                    }
                 }
             }
+        }
+    }
+
+     post {
+        always {
+            echo 'slack notification'
+            slackSend channel: '#jenkins',
+                color: COLOR_MAP[currentBuild.currentResult],
+                message: "*${currentBuild.currentResult}:* Job ${env.JOB_NAME} build ${env.BUILD_NUMBER} \n more info at: ${env.BUILD_URL}"
         }
     }
 }
