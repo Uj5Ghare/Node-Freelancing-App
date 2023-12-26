@@ -54,7 +54,7 @@ pipeline {
         stage("Docker_Build_Img") {
             steps {
                 script {
-                    dockerImage = docker.build{REGISTRY_REPO, "./Dockerfile")
+                    dockerImage = docker.build(REGISTRY_REPO, "./Dockerfile")
                 }
             }
         }
