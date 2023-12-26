@@ -4,18 +4,18 @@ def COLOR_MAP = [
 ]
 
 pipeline {
-    agent any 
+    agent any
 
     environment {
         SONAR_SERVER = "sonar-server"
         SONAR_SCANNER = "sonar-scanner"
         REGISTRY_REPO = "814495875142.dkr.ecr.ap-south-1.amazonaws.com/ec2-demo"
         REGISTRY_URL = "https://814495875142.dkr.ecr.ap-south-1.amazonaws.com"
-        REGISTRY_CREDS = "ecr:ap-south-1:aws-creds" 
+        REGISTRY_CREDS = "ecr:ap-south-1:aws-creds"
         CLUSTER = "my-cluster"
         SERVICE = "node-svc"
-        }
-    
+    }
+
     stages {
         stage {
             steps("Checkout") {
@@ -34,19 +34,23 @@ pipeline {
                 scannerHome = tool "${SONAR_SCANNER}"
             }
             steps {
-                withSonarQubeEnv(${SONAR_SERVER}) {
-                    sh '''${scannerHome}/bin/sonar-scanner \
+                withSonarQubeEnv($ {
+                    SONAR_SERVER
+                }) {
+                    sh ''
+                    '${scannerHome}/bin/sonar-scanner \
                         -Dsonar.projectKey=node-key \
                         -Dsonar.projectName=Node-Project \
-                        -Dsonar.projectVersion=1.0 '''
+                        -Dsonar.projectVersion=1.0 '
+                    ''
                 }
             }
         }
 
         stage("Quality_Gates") {
             steps {
-                timeout(10){
-                    waitForQualityGate abortPipeline: true 
+                timeout(10) {
+                    waitForQualityGate abortPipeline: true
                 }
             }
         }
@@ -58,12 +62,12 @@ pipeline {
                 }
             }
         }
-         
+
         stage("Docker_Push_To_ECR") {
             steps {
                 script {
                     docker.withRegistry(REGISTRY_URL, REGISTRY_CREDS)
-                        dockerImage("$BUILD_NUMBER")
+                    dockerImage("$BUILD_NUMBER")
                 }
             }
         }
@@ -72,18 +76,18 @@ pipeline {
             steps {
                 withAWS(credentials: "aws_creds", region: "ap-south-1") {
                     sh 'aws ecs update-service --cluster ${CLUSTER} --service ${SERVICE} --force-new-deployment'
-                    }
                 }
             }
         }
     }
 
+
     post {
-        always {
-            echo 'slack notification'
-            slackSend channel: '#jenkins',
-                color: COLOR_MAP[currentBuild.currentResult],
-                message: "*${currentBuild.currentResult}:* Job ${env.JOB_NAME} build ${env.BUILD_NUMBER} \n more info at: ${env.BUILD_URL}"
+    always {
+        echo 'slack notification'
+        slackSend channel: '#jenkins',
+            color: COLOR_MAP[currentBuild.currentResult],
+            message: "*${currentBuild.currentResult}:* Job ${env.JOB_NAME} build ${env.BUILD_NUMBER} \n more info at: ${env.BUILD_URL}"
         }
     }
 }
