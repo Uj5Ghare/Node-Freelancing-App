@@ -19,7 +19,7 @@ pipeline {
     stages {
         stage("Checkout") {
             steps {
-                git branch: "main", credentialId: "ssh-github", url: "git@github.com:Uj5Ghare/Node-Freelancing-App.git"
+                git branch: "main", credentialsId: "ssh-github", url: "git@github.com:Uj5Ghare/Node-Freelancing-App.git"
             }
         }
 
@@ -34,7 +34,7 @@ pipeline {
                 scannerHome = tool "${SONAR_SCANNER}"
             }
             steps {
-                withSonarQubeEnv(${SONAR_SERVER}) {
+                withSonarQubeEnv("${SONAR_SERVER}") {
                     sh '''${scannerHome}/bin/sonar-scanner \
                         -Dsonar.projectKey=node-key \
                         -Dsonar.projectName=Node-Project \
