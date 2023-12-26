@@ -14,7 +14,7 @@ pipeline {
     stages {
         stage {
             steps("Checkout") {
-                git clone branch: "main", credentialId: "ssh-github", url: "git@github.com:Uj5Ghare/Node-Freelancing-App.git"
+                git branch: "main", credentialId: "ssh-github", url: "git@github.com:Uj5Ghare/Node-Freelancing-App.git"
             }
         }
 
