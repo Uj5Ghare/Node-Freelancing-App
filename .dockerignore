@@ -1,0 +1,8 @@
+sonar-project.properties 
+docker-compose.yml 
+Dockerfile  
+README.md
+k8s
+.dockerignore
+.git
+.github
