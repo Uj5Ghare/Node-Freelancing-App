@@ -3,23 +3,25 @@ kind: Deployment
 metadata:
   name: freelancing-deploy
 spec:
+  replicas: 2
   selector:
     matchLabels:
-      app: freelancing-app 
+      app: freelancing-app
   template:
     metadata:
-      name: freelancing-pod 
+      name: freelancing-pod
       labels:
-        app: freelancing-app 
+        app: freelancing-app
     spec:
       containers:
       - name: freelancing-con
-        image: uj5ghare/node-freelancing-app 
+        image: uj5ghare/node-freelancing-app
         resources:
           limits:
             memory: "128Mi"
             cpu: "500m"
         ports:
-        - containerPort: 5000
+        - containerPort: 3000
+
 
 
